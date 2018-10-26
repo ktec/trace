@@ -18,20 +18,23 @@ defmodule Trace do
     # :erlang.trace_pattern({Trace.Uploader, :_, :_}, [{:_, [], [{:return_trace}]}], [:local])
 
     patterns = [
-      # {:_, :_, :_}
-      # {Trace.Example, :_, :_},
-      {Trace.Uploader, :_, :_}
+      {:_, :_, :_}
+      # {Trace.Example, :_, :_}
+      # {Trace.Uploader, :_, :_}
     ]
 
     match_options = [
       # Trace everything
       [{:_, [], [{:return_trace}]}]
 
+      # | false
       # true
     ]
 
-    for pattern <- patterns, match_option <- match_options do
-      :erlang.trace_pattern(pattern, match_option, [:local, :meta, :call_count, :call_time])
+    for pattern <- patterns, match_spec <- match_options do
+      opts = [:local, :meta, :call_count, :call_time]
+      # opts = [:global]
+      :erlang.trace_pattern(pattern, match_spec, opts)
     end
 
     # pid = :processes
